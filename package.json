@@ -9,16 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.11",
+    "@mui/material": "^5.14.11",
+    "@prisma/client": "^5.3.1",
+    "@reduxjs/toolkit": "^1.9.6",
+    "install": "^0.13.0",
+    "next": "latest",
+    "npm": "^10.1.0",
     "react": "latest",
     "react-dom": "latest",
-    "next": "latest"
+    "react-redux": "^8.1.2"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "latest",
     "@types/node": "latest",
+    "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/react-redux": "^7.1.27",
     "eslint": "latest",
-    "eslint-config-next": "latest"
+    "eslint-config-next": "latest",
+    "prisma": "^5.3.1",
+    "typescript": "latest"
   }
 }
