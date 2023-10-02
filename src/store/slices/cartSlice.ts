@@ -1,11 +1,25 @@
-import { CartSlice } from "@/types/cart";
-import { createSlice } from "@reduxjs/toolkit";
+import { CartItem, CartSlice } from "@/types/cart";
+import { config } from "@/utils/config";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState: CartSlice = {
   items: [],
   isLoading: false,
   error: null,
 };
+
+export const confirmOrder = createAsyncThunk(
+  "cart/confirmOrder",
+  async (payload: CartItem[], thunkApi) => {
+    const response = await fetch(`${config.apiBaseUrl}/order`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",

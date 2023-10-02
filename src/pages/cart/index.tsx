@@ -1,12 +1,14 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { updateQuantity } from "@/store/slices/cartSlice";
+import { confirmOrder, updateQuantity } from "@/store/slices/cartSlice";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { Box, Button, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const getCartTotalPrice = () => {
     let totalPrice = 0;
@@ -14,12 +16,13 @@ const Cart = () => {
     return totalPrice;
   };
 
-  const increaseQuantity = (id: number, quantity: number) => {
+  const handleUpdateQuantity = (id: number, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
   };
 
-  const decreaseQuantity = (id: number, quantity: number) => {
-    dispatch(updateQuantity({ id, quantity }));
+  const handleConfirmOrder = () => {
+    dispatch(confirmOrder(cartItems));
+    router.push("/confirmation");
   };
 
   return (
@@ -29,6 +32,7 @@ const Cart = () => {
           <Box>
             {cartItems.map((item) => (
               <Box
+                key={item.id}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -50,7 +54,7 @@ const Cart = () => {
                     <RemoveCircleOutlineIcon
                       sx={{ fontSize: 40, color: "green", cursor: "pointer" }}
                       onClick={() =>
-                        decreaseQuantity(item.id, item.quantity - 1)
+                        handleUpdateQuantity(item.id, item.quantity - 1)
                       }
                     />
                     <Typography sx={{ mx: 2 }} variant="h4">
@@ -59,7 +63,7 @@ const Cart = () => {
                     <AddCircleOutlineIcon
                       sx={{ fontSize: 40, color: "green", cursor: "pointer" }}
                       onClick={() =>
-                        increaseQuantity(item.id, item.quantity + 1)
+                        handleUpdateQuantity(item.id, item.quantity + 1)
                       }
                     />
                   </Box>
@@ -85,7 +89,11 @@ const Cart = () => {
             <Typography variant="h3">
               Total price: {getCartTotalPrice()}
             </Typography>
-            <Button variant="contained" sx={{ width: "fit-content", my: 3 }}>
+            <Button
+              variant="contained"
+              sx={{ width: "fit-content", my: 3 }}
+              onClick={handleConfirmOrder}
+            >
               Confirm order
             </Button>
           </Box>
