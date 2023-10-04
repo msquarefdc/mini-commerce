@@ -1,4 +1,8 @@
-import { CartItem, CartSlice } from "@/types/cart";
+import {
+  CancelOrderOptions,
+  CartSlice,
+  CreateOrderOptions,
+} from "@/types/cart";
 import { config } from "@/utils/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -8,16 +12,38 @@ const initialState: CartSlice = {
   error: null,
 };
 
-export const confirmOrder = createAsyncThunk(
-  "cart/confirmOrder",
-  async (payload: CartItem[], thunkApi) => {
-    const response = await fetch(`${config.apiBaseUrl}/order`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+export const createOrder = createAsyncThunk(
+  "cart/createOrder",
+  async (options: CreateOrderOptions, thunkApi) => {
+    const { payload, onSuccess, onError } = options;
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/order`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const dataFromServer = await response.json();
+      onSuccess && onSuccess(dataFromServer);
+    } catch (err) {
+      onError && onError(err);
+    }
+  }
+);
+
+export const cancelOrder = createAsyncThunk(
+  "cart/cancelOrder",
+  async (options: CancelOrderOptions, thunkApi) => {
+    const { orderId, onSuccess, onError } = options;
+    try {
+      await fetch(`${config.apiBaseUrl}/order/${orderId}`, {
+        method: "DELETE",
+      });
+      onSuccess && onSuccess();
+    } catch (err) {
+      onError && onError(err);
+    }
   }
 );
 

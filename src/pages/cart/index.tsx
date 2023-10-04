@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { confirmOrder, updateQuantity } from "@/store/slices/cartSlice";
+import { createOrder, updateQuantity } from "@/store/slices/cartSlice";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { Box, Button, Typography } from "@mui/material";
@@ -20,9 +20,14 @@ const Cart = () => {
     dispatch(updateQuantity({ id, quantity }));
   };
 
-  const handleConfirmOrder = () => {
-    dispatch(confirmOrder(cartItems));
-    router.push("/confirmation");
+  const onSuccess = (data: any) => {
+    router.push(`/confirmation?orderId=${data.orderId}&status=${data.status}`);
+  };
+
+  const onError = () => {};
+
+  const handleCreateOrder = async () => {
+    dispatch(createOrder({ payload: cartItems, onSuccess, onError }));
   };
 
   return (
@@ -92,7 +97,7 @@ const Cart = () => {
             <Button
               variant="contained"
               sx={{ width: "fit-content", my: 3 }}
-              onClick={handleConfirmOrder}
+              onClick={handleCreateOrder}
             >
               Confirm order
             </Button>

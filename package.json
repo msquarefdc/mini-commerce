@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.9.6",
     "install": "^0.13.0",
     "next": "latest",
+    "next-auth": "^4.23.2",
     "npm": "^10.1.0",
     "react": "latest",
     "react-dom": "latest",
